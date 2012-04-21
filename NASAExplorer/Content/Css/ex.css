@@ -1,0 +1,13 @@
+﻿body {
+    font-family: 'Open Sans', sans-serif; 
+    color: white;
+    background: #222;
+}
+
+h1, h2, h3, h4, h5,
+p { color: white; }
+
+.navbar .brand  
+{
+    font-weight: bold;
+}

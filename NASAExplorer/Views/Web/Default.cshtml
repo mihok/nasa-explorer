@@ -1,0 +1,45 @@
+﻿@model NASAExplorer.Models.BaseViewModel
+
+@{
+    ViewBag.Title = Model.SEOTitle;
+    ViewBag.Description = Model.SEODescription;
+    ViewBag.Keywords = Model.SEOKeywords;
+    Layout = "~/Views/Shared/_Skeleton.cshtml";
+}
+
+@section Head {
+    <style type="text/css">
+        body > .container { margin-top: 100px; }
+        body { background: #222 url(/Content/Images/temp.jpg); background-size: 100%; }
+        
+        body > .container > .hero-unit { background: rgba(0,0,0,0.5); color: white; }
+    </style>
+}
+
+<div class="container">
+
+    <!-- Main hero unit for a primary marketing message or call to action -->
+    <div class="hero-unit">
+        <h1>'<i>Join the army,</i>' they said!<br />'<i>See the world,</i>' they said!<br />I'd rather be sailing the solar system.</h1><br />
+        <p><a href="/explore" class="btn btn-primary btn-large">Start</a></p>
+    </div>
+
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="span4">
+            <h2>Explorer</h2>
+            <p>Ever wonder whats beyond earth? We arent all astronauts so physically getting there can be pretty tough! NASA-EX is a live 3D explorer taking data from HORIZON.</p>
+            <p><a class="btn" href="/explore">Explore Now &raquo;</a></p>
+        </div>
+        <div class="span4">
+            <h2>Join us!</h2>
+            <p>We're looking for help! Any help would be appreciated in building the most epic explorer app made to date!</p>
+            <p><a class="btn" href="/contact">Contact Us &raquo;</a></p>
+        </div>
+        <div class="span4">
+            <h2>NASA SpaceApps Challenge</h2>
+            <p>The NASA-EX was built for the International Space Apps Challenge held by NASA in 27 locations around the world (and in space!)</p>
+            <p><a class="btn" href="http://spaceappschallenge.org/challenge/nasa-planetary-data-system-interface/" target="_blank">Learn More &raquo;</a></p>
+        </div>
+    </div>
+</div> <!-- /container -->

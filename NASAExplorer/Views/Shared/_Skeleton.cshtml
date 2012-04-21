@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    @{ Html.RenderPartial("Modules/Stylesheets"); }
+    @RenderSection("Head", false)
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+</head>
+
+<body>
+    <div id="top"><a name="top"></a></div>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#" title="National Aeronautics and Space Administration Explorer Experiment">NASA-EX</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="/about">About</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    @RenderBody()
+    @{ Html.RenderPartial("Modules/Javascript"); }
+    @if (IsSectionDefined("Javascript"))
+    {
+        @RenderSection("Javascript", false)
+    }
+    
+    @{ Html.RenderPartial("Modules/Analytics"); }
+</body>
+</html>
