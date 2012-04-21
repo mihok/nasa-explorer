@@ -16,5 +16,14 @@ namespace NASAExplorer.Controllers
             return View();
         }
 
+        public JsonResult GetMajorObjects()
+        {
+            return Json(null);
+        }
+
+        public JsonResult GetCoords(int id)
+        {
+            return Json(null);
+        }
     }
 }
