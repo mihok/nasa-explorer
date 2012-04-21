@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using NASAExplorer.Services;
 
 namespace NASAExplorer.Controllers
 {
@@ -23,7 +24,10 @@ namespace NASAExplorer.Controllers
 
         public JsonResult GetCoords(int id)
         {
-            return Json(null);
+            HorizonInterface horizon = new HorizonInterface();
+            Coord xyz = horizon.GetCoordinates(id);         
+
+            return Json(xyz);
         }
     }
 }
