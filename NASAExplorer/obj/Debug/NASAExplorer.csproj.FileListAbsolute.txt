@@ -1,0 +1,5 @@
+C:\Development\Sites\NASA\NASAExplorer\bin\NASAExplorer.dll
+C:\Development\Sites\NASA\NASAExplorer\bin\NASAExplorer.pdb
+C:\Development\Sites\NASA\NASAExplorer\obj\Debug\ResolveAssemblyReference.cache
+C:\Development\Sites\NASA\NASAExplorer\obj\Debug\NASAExplorer.dll
+C:\Development\Sites\NASA\NASAExplorer\obj\Debug\NASAExplorer.pdb
