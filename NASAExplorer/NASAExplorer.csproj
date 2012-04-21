@@ -90,9 +90,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Skeleton.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\App\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Views\Web\Default.cshtml" />
   </ItemGroup>
@@ -104,6 +102,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\Modules\Analytics.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\App\Explore.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Web\Contact.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Web\About.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

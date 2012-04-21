@@ -17,5 +17,15 @@ namespace NASAExplorer.Controllers
             return View(new BaseViewModel());
         }
 
+        public ActionResult About()
+        {
+            return View();
+        }
+
+        public ActionResult Contact()
+        {
+            return View();
+        }
+
     }
 }

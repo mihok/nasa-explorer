@@ -11,7 +11,7 @@ namespace NASAExplorer.Controllers
         //
         // GET: /App/
 
-        public ActionResult Index()
+        public ActionResult Explore()
         {
             return View();
         }

@@ -22,6 +22,24 @@ namespace NASAExplorer
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                "ExplorerRoute",
+                "explore",
+                new { controller = "App", action = "Explore" }
+            );
+
+            routes.MapRoute(
+                "AboutRoute",
+                "about",
+                new { controller = "Web", action = "About" }
+            );
+
+            routes.MapRoute(
+                "ContactRoute",
+                "contact",
+                new { controller = "Web", action = "Contact" }
+            );
+
+            routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Web", action = "Default", id = UrlParameter.Optional } // Parameter defaults
