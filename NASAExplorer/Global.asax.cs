@@ -40,6 +40,12 @@ namespace NASAExplorer
             );
 
             routes.MapRoute(
+                "CoordinateTest1Route",
+                "coords/{id}",
+                new { controller = "API", action = "GetCoords", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Web", action = "Default", id = UrlParameter.Optional } // Parameter defaults

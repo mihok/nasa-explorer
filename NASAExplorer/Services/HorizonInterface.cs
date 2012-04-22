@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Net.Sockets;
+using System.Threading;
 
 namespace NASAExplorer.Services
 {
@@ -23,7 +25,7 @@ namespace NASAExplorer.Services
 
         public TelnetConnection Conn { get; set; }
 
-        private Dictionary<string, string> _cmds { get; set; }
+        private Dictionary<int, KeyValuePair<string, string>> _cmds { get; set; }
 
         public HorizonInterface()
         {
@@ -31,38 +33,66 @@ namespace NASAExplorer.Services
             Now = DateTime.Now;
             Next = Now.AddHours(1);
 
-            _cmds = new Dictionary<string, string>();
-            _cmds.Add("<cr>:", "E");
-            _cmds.Add("[o,e,v,?] :", "v");
-            _cmds.Add("[ <id>,coord,geo ] :", String.Format("{0}\n", CENTER));
-            _cmds.Add("[ y/n ] -->", "y\n");
-            _cmds.Add("[eclip, frame, body ] :", "eclip\n");
-            _cmds.Add("] :", String.Format("{0}\n", Now.ToString()));
-            _cmds.Add("] :", String.Format("{0}\n", Next.ToString()));
-            _cmds.Add("? ] :", "1h\n");
-            _cmds.Add("?] :", "n\n");
-            _cmds.Add("[J2000, B1950] :", "J2000\n");
-            _cmds.Add("LT+S ]  :", "1\n");
-            _cmds.Add("3=KM-D] :'", "2\n");
-            _cmds.Add("YES, NO ] :'", "YES\n");
-            _cmds.Add("YES, NO ] :'", "NO\n");
-            _cmds.Add("[ 1-6, ?  ] :'", "1\n");
+            _cmds = new Dictionary<int, KeyValuePair<string, string>>();
+            _cmds.Add(0, new KeyValuePair<string, string>("<cr>:", "E"));
+            _cmds.Add(1, new KeyValuePair<string, string>("[o,e,v,?] :", "v"));
+            _cmds.Add(2, new KeyValuePair<string, string>("[ <id>,coord,geo ] :", String.Format("{0}", CENTER)));
+            _cmds.Add(3, new KeyValuePair<string, string>("[ y/n ] -->", "y"));
+            _cmds.Add(4, new KeyValuePair<string, string>("[eclip, frame, body ] :", "eclip"));
+            _cmds.Add(5, new KeyValuePair<string, string>("] :", String.Format("{0}", Now.ToString("yyyy-MMM-dd hh:mm"))));
+            _cmds.Add(6, new KeyValuePair<string, string>("] :", String.Format("{0}", Next.ToString("yyyy-MMM-dd hh:mm"))));
+            _cmds.Add(7, new KeyValuePair<string, string>("? ] :", "1h"));
+            _cmds.Add(8, new KeyValuePair<string, string>("?] :", "n"));
+            _cmds.Add(9, new KeyValuePair<string, string>("[J2000, B1950] :", "J2000"));
+            _cmds.Add(10, new KeyValuePair<string, string>("LT+S ]  :", "1"));
+            _cmds.Add(11, new KeyValuePair<string, string>("3=KM-D] :'", "2"));
+            _cmds.Add(12, new KeyValuePair<string, string>("YES, NO ] :'", "YES"));
+            _cmds.Add(13, new KeyValuePair<string, string>("YES, NO ] :'", "NO"));
+            _cmds.Add(14, new KeyValuePair<string, string>("[ 1-6, ?  ] :'", "1"));
         }
 
-        public Coord GetCoordinates(int Id) {
+        public String GetCoordinates(int Id) {
             Coord loc = new Coord();
-            int index = 0;
-
+            string buffer = "";
+            List<string> stopString = new List<string>();
+            
+            stopString.Add("$$SOE");
+            stopString.Add("$$EOE");
             loc.X = -1;
             loc.Y = -1;
             loc.Z = -1;
 
-            if (Conn.IsConnected && Conn.Read() == "Horizon>")
+
+            buffer = Conn.ReadUntil(">");
+            Conn.Write(String.Format("{0}\n", Id));
+
+            for (int i = 0; i <= _cmds.Count - 1; i++)
             {
-                Console.Write("win");
+                buffer += Conn.Read();//(_cmds[i].Key, 100);
+                Conn.WriteLine(_cmds[i].Value);
             }
 
-            return loc;
+            buffer += Conn.Read();
+            buffer = buffer.Split(stopString.ToArray(), StringSplitOptions.RemoveEmptyEntries)[1];
+            buffer = buffer.Substring(0, buffer.Length - 5);
+
+            /*
+            TcpClient client = new TcpClient(HOST, PORT);
+            TelnetStream conn = new TelnetStream(client.GetStream());
+
+            conn.SetRemoteMode(TelnetOption.Echo, false);
+            Expector expect = new Expector(conn);
+
+            expect.Expect("Horizons>");
+            expect.SendLine(String.Format("{0}\n", Id));
+
+            for (var i = 0; i <= 14; i++)
+            {
+                expect.Expect(_cmds[i].Key);
+                expect.SendLine(_cmds[i].Value);
+            }
+            */
+            return buffer;
         }
 
         public void Write(string cmd)

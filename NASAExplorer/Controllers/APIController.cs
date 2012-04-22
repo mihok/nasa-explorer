@@ -22,12 +22,12 @@ namespace NASAExplorer.Controllers
             return Json(null);
         }
 
-        public JsonResult GetCoords(int id)
+        public JsonResult GetCoords(int id = 399) // default to earth
         {
             HorizonInterface horizon = new HorizonInterface();
-            Coord xyz = horizon.GetCoordinates(id);         
+            var xyz = horizon.GetCoordinates(id);         
 
-            return Json(xyz);
+            return Json(xyz, JsonRequestBehavior.AllowGet);
         }
     }
 }

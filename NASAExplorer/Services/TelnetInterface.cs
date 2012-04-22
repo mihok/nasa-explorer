@@ -25,7 +25,7 @@ namespace NASAExplorer.Services
         SGA = 3
     }
 
-    public class TelnetConnection
+    public class TelnetConnection : IDisposable
     {
         TcpClient tcpSocket;
 
@@ -35,6 +35,22 @@ namespace NASAExplorer.Services
         {
             tcpSocket = new TcpClient(Hostname, Port);
 
+        }
+
+        public virtual void Dispose()
+        {
+            tcpSocket = null;
+        }
+
+        public bool Handshake()
+        {
+            string s = Read();
+            if (!s.TrimEnd().EndsWith(">"))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public string Login(string Username,string Password,int LoginTimeOutMs)
@@ -64,8 +80,21 @@ namespace NASAExplorer.Services
         public void Write(string cmd)
         {
             if (!tcpSocket.Connected) return;
-            byte[] buf = System.Text.ASCIIEncoding.ASCII.GetBytes(cmd.Replace("\0xFF","\0xFF\0xFF"));
+            byte[] buf = System.Text.ASCIIEncoding.ASCII.GetBytes(cmd/*.Replace("\0xFF","\0xFF\0xFF")*/);
             tcpSocket.GetStream().Write(buf, 0, buf.Length);
+        }
+
+        public string ReadUntil(string substring, int timeout = 1000)
+        {
+            if(!tcpSocket.Connected) return null;
+            string buffer = "";
+            while (IsConnected && !buffer.Trim().EndsWith(substring))
+            {
+                buffer += Read();
+                System.Threading.Thread.Sleep(timeout);
+            }
+
+            return buffer;
         }
 
         public string Read()
