@@ -7,7 +7,7 @@ MiniMap = (function () {
     function MiniMap() {
         this.map = $("#map")[0].getContext("2d");
         this.options = {};
-        this.options.point_radius = 2;
+        this.options.point_radius = 1;
         this.options.point_color = "#FFF";
         this.options.width = 200;
         this.options.height = 200;
