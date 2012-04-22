@@ -42,7 +42,7 @@
                             var radius = 5,
                                         segments = 16,
                                         rings = 16;
-                            var geometry = new THREE.SphereGeometry(0.2, 16, 16); //new THREE.TorusGeometry(1, 0.42);
+                            var geometry = new THREE.SphereGeometry(0.05, 16, 16); //new THREE.TorusGeometry(1, 0.42);
                             var material = new THREE.MeshNormalMaterial();
                             var planet = new THREE.Mesh(geometry, material);
 
@@ -111,6 +111,17 @@
             
             scene.add(mesh);
             */
+
+            var geometry = new THREE.SphereGeometry(0.1, 16, 16); //new THREE.TorusGeometry(1, 0.42);
+            var material = new THREE.MeshLambertMaterial({ color: 0xFF8200 });
+            var sun = new THREE.Mesh(geometry, material);
+
+            sun.position.x = 0;
+            sun.position.y = 0;
+            sun.position.z = 0;
+
+            scene.add(sun);
+
             renderPlanets(scene);
         }
 
