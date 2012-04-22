@@ -32,6 +32,31 @@
 
         if (!init()) animate();
 
+        function renderPlanets(sc) {
+            for (var i = 0; i <= 8; i++) {
+                $.ajax({
+                    url: '/api/coords/' + (199 + (100 * i)),
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data) {
+                            var radius = 5,
+                                        segments = 16,
+                                        rings = 16;
+                            var geometry = new THREE.SphereGeometry(0.2, 16, 16); //new THREE.TorusGeometry(1, 0.42);
+                            var material = new THREE.MeshNormalMaterial();
+                            var planet = new THREE.Mesh(geometry, material);
+
+                            planet.position.x = data[0].X;
+                            planet.position.y = data[0].Y;
+                            planet.position.z = data[0].Z;
+
+                            sc.add(planet);
+                        }
+                    }
+                });
+            };
+        };
+
         // init the scene
         function init() {
 
@@ -80,10 +105,13 @@
 
             // here you add your objects
             // - you will most likely replace this part by your own
-            var geometry = new THREE.SphereGeometry(1, 16, 16); //new THREE.TorusGeometry(1, 0.42);
+            /*var geometry = new THREE.SphereGeometry(1, 16, 16); //new THREE.TorusGeometry(1, 0.42);
             var material = new THREE.MeshNormalMaterial();
             var mesh = new THREE.Mesh(geometry, material);
+            
             scene.add(mesh);
+            */
+            renderPlanets(scene);
         }
 
         // animation loop
