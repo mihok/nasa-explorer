@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Net.Sockets;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace NASAExplorer.Services
 {
@@ -51,17 +52,13 @@ namespace NASAExplorer.Services
             _cmds.Add(14, new KeyValuePair<string, string>("[ 1-6, ?  ] :'", "1"));
         }
 
-        public String GetCoordinates(int Id) {
-            Coord loc = new Coord();
+        public List<Coord> GetCoordinates(int Id) {
+            List<Coord> loc = new List<Coord>();
             string buffer = "";
             List<string> stopString = new List<string>();
             
             stopString.Add("$$SOE");
             stopString.Add("$$EOE");
-            loc.X = -1;
-            loc.Y = -1;
-            loc.Z = -1;
-
 
             buffer = Conn.ReadUntil(">");
             Conn.Write(String.Format("{0}\n", Id));
@@ -74,8 +71,21 @@ namespace NASAExplorer.Services
 
             buffer += Conn.Read();
             buffer = buffer.Split(stopString.ToArray(), StringSplitOptions.RemoveEmptyEntries)[1];
-            buffer = buffer.Substring(0, buffer.Length - 5);
 
+            foreach (string set in Regex.Split(buffer.Trim(), "\r\n"))
+            {
+                string[] element = set.Split(',');
+                if (element.Length > 0)
+                {
+                    Coord temp = new Coord();
+                    
+                    temp.X = double.Parse(element[2]);
+                    temp.Y = double.Parse(element[3]);
+                    temp.Z = double.Parse(element[4]);
+
+                    loc.Add(temp);
+                }
+            }
             /*
             TcpClient client = new TcpClient(HOST, PORT);
             TelnetStream conn = new TelnetStream(client.GetStream());
@@ -92,7 +102,7 @@ namespace NASAExplorer.Services
                 expect.SendLine(_cmds[i].Value);
             }
             */
-            return buffer;
+            return loc;
         }
 
         public void Write(string cmd)
