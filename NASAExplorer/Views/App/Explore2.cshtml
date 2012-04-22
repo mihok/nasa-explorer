@@ -11,6 +11,13 @@
 	        padding: 0;
 	        margin: 0;       
         }
+        .bottom  
+        {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            color: black;
+        }
         /*canvas { background: black; }*/
     </style>
 }
@@ -113,7 +120,7 @@
             */
 
             var geometry = new THREE.SphereGeometry(0.1, 16, 16); //new THREE.TorusGeometry(1, 0.42);
-            var material = new THREE.MeshLambertMaterial({ color: 0xFF8200 });
+            var material = new THREE.MeshLambertMaterial({ color: 0xCC0000 });
             var sun = new THREE.Mesh(geometry, material);
 
             sun.position.x = 0;
@@ -152,7 +159,7 @@
     </script>
 }
 <div class="bottom" id="inlineDoc" >
-	- <i>p</i> for screenshot
+	<b>loading may take several minutes</b> - <i>p</i> for screenshot
 </div> 
 
 <div id="explore"></div>
