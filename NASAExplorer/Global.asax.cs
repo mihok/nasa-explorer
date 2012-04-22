@@ -22,9 +22,21 @@ namespace NASAExplorer
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                "ExplorerRoute",
+                "Explorer1Route",
                 "explore",
-                new { controller = "App", action = "Explore" }
+                new { controller = "App", action = "Explore2" }
+            );
+
+            routes.MapRoute(
+                "Explorer2Route",
+                "explore/1",
+                new { controller = "App", action = "Explore1" }
+            );
+
+            routes.MapRoute(
+                "ExplorerRoute",
+                "explore/2",
+                new { controller = "App", action = "Explore2" }
             );
 
             routes.MapRoute(
@@ -41,15 +53,22 @@ namespace NASAExplorer
 
             routes.MapRoute(
                 "CoordinateTest1Route",
-                "coords/{id}",
+                "api/coords/{id}",
                 new { controller = "API", action = "GetCoords", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
                 "CoordinateTest2Route",
-                "coordsbydate/{id}",
+                "api/coordsbydate/{id}",
                 new { controller = "API", action = "GetCoordsByDate", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                "CoordinateTest3Route",
+                "api/planets",
+                new { controller = "API", action = "GetPlanets", id = UrlParameter.Optional }
+            );
+
 
             routes.MapRoute(
                 "Default", // Route name

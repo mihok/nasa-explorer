@@ -5,7 +5,8 @@
 
 @section Head {
     <style type="text/css">
-        canvas { position: absolute; height: 100%; width: 100%; }
+        body { padding-top: 60px; }
+        canvas { height: 480px; width: 640px; background: black; }
     </style>
 }
 
@@ -13,55 +14,12 @@
     <script type="text/javascript" src="@Url.Content("~/Scripts/three.min.js")"></script>
     <script type="text/javascript">
         (function () {
-            /*
-
-            // set the scene size
-            var WIDTH = 400,
-            HEIGHT = 300;
-
-            // set some camera attributes
-            var VIEW_ANGLE = 45,
-            ASPECT = WIDTH / HEIGHT,
-            NEAR = 0.1,
-            FAR = 10000;
-
-            // get the DOM element to attach to
-            // - assume we've got jQuery to hand
-            var $container = $('#container');
-
-            // create a WebGL renderer, camera
-            // and a scene
-            var renderer = new THREE.WebGLRenderer();
-            var camera =
-            new THREE.PerspectiveCamera(
-            VIEW_ANGLE,
-            ASPECT,
-            NEAR,
-            FAR);
-
-            var scene = new THREE.Scene();
-
-            // add the camera to the scene
-            scene.add(camera);
-
-            // the camera starts at 0,0,0
-            // so pull it back
-            camera.position.z = 300;
-
-            // start the renderer
-            renderer.setSize(WIDTH, HEIGHT);
-
-            // attach the render-supplied DOM element
-            $container.append(renderer.domElement);
-
-            */
-
-            var width = window.clientWidth,
-                height = window.clientHeight,
+            var width = 640,
+                height = 480,
                 angle = 45,
                 aspect = width / height,
-                near = 0.00000000001,
-                far = 10,
+                near = 0.1,
+                far = 50,
                 canvas = $('#explore'),
                 renderer = undefined,
                 camera = undefined,
@@ -69,12 +27,43 @@
                 resize = function resize() {
                     if (canvas) {
                         //update dimension vars
-                        width = window.clientWidth;
-                        height = window.clientHeight;
+                        //width = window.clientWidth;
+                        //height = window.clientHeight;
 
-                        canvas.width(width);
-                        canvas.height(height);
+                        //canvas.width(width);
+                        //canvas.height(height);
                     }
+                },
+                renderPlanets = function renderPlanets(sc,rndr) {
+                    for (var i = 0; i <= 8; i++) {
+                        $.ajax({
+                            url: '/api/coords/' + (199 + (100 * i)),
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data) {
+                                    var radius = 5,
+                                        segments = 16,
+                                        rings = 16;
+                                    var sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xCC0000 });
+                                    var planet = new THREE.Mesh(
+                                          new THREE.SphereGeometry(
+                                            radius,
+                                            segments,
+                                            rings),
+                                      sphereMaterial);
+
+                                    planet.position.x = data[0].X;
+                                    planet.position.y = data[0].Y;
+                                    planet.position.z = data[0].Z;
+
+                                    sc.add(planet);
+
+                                    // not the proper way but render after each add
+                                    rndr.render(scene, camera);
+                                }
+                            }
+                        });
+                    };
                 };
 
             $(document).ready(function () {
@@ -99,11 +88,36 @@
                 }
 
                 scene.add(camera);
-                camera.position.z = 5; // move camera back from 0,0,0
+                camera.position.z = -5; // move camera back from 0,0,0
                 renderer.setSize(width, height);
                 canvas.append(renderer.domElement);
+
+                var radius = 50,
+                    segments = 16,
+                    rings = 16,
+                    sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xCC0000 }),
+                    planet = new THREE.Mesh(new THREE.SphereGeometry(radius,segments,rings), sphereMaterial);
+
+                planet.position.x = 1;
+                planet.position.y = 1;
+                planet.position.z = 1;
+
+                scene.add(planet);
+
+                var ambientLight = new THREE.AmbientLight(0xFFFFFF);
+
+                // set its position
+                ambientLight.position.x = 0;
+                ambientLight.position.y = 0;
+                ambientLight.position.z = 50;
+
+                // add to the scene
+                scene.add(ambientLight);
+
+                //renderPlanets(scene, renderer);
+                renderer.render(scene, camera);
             });
         })();
     </script>
 }
-<canvas id="explore"></canvas>
+<div id="explore"></div>
