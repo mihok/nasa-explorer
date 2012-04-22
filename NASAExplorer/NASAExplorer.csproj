@@ -80,6 +80,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
+    <Content Include="Scripts\minimap.js" />
     <Content Include="Scripts\three.js\Detector.js" />
     <Content Include="Scripts\three.js\postprocessing\BloomPass.js" />
     <Content Include="Scripts\three.js\postprocessing\DotScreenPass.js" />
@@ -172,6 +173,7 @@
   <ItemGroup>
     <None Include="Scripts\threex\Makefile" />
     <None Include="Scripts\threex\README.md" />
+    <Content Include="Views\App\MiniMap.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

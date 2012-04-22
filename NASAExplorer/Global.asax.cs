@@ -40,6 +40,12 @@ namespace NASAExplorer
             );
 
             routes.MapRoute(
+                "MiniMapRoute",
+                "explore/minimap",
+                new { controller = "App", action = "MiniMap" }
+            );
+
+            routes.MapRoute(
                 "AboutRoute",
                 "about",
                 new { controller = "Web", action = "About" }

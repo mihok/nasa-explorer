@@ -21,5 +21,10 @@ namespace NASAExplorer.Controllers
             return View("Explore2");
         }
 
+        public ActionResult MiniMap()
+        {
+            return View();
+        }
+
     }
 }

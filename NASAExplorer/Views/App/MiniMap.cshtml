@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "MiniMap";
+    Layout = "~/Views/Shared/_Skeleton.cshtml";
+}
+
+@section Head {
+    <link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+        body {
+          color: #333;
+          font-family: 'Oxygen', sans-serif;
+        }
+
+        h1, footer, .desc {
+          text-align: center;
+        }
+
+        footer {
+          margin-top: 50px;
+        }
+
+        #minimap {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          border: 2px solid black;
+          width: 200px;
+          height: 230px;
+        }
+
+        #minimap .title {
+          height: 30px;
+          line-height: 30px;
+          color: white;
+          font-weight: bold;
+          text-align: center;
+          background: #45484d; /* Old browsers */
+          background: -moz-linear-gradient(top, #45484d 0%, #000000 100%); /* FF3.6+ */
+          background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+          background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+          background: -o-linear-gradient(top, #45484d 0%,#000000 100%); /* Opera 11.10+ */
+          background: -ms-linear-gradient(top, #45484d 0%,#000000 100%); /* IE10+ */
+          background: linear-gradient(top, #45484d 0%,#000000 100%); /* W3C */
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+        }
+    </style>
+}
+
+@section Javascript {
+    <script type="text/javascript">
+        (function () {
+            var Map;
+            var pointsLoaded = 0;
+
+            function getPlanetData() {
+                var obj = [];
+
+                for (var i = 0; i <= 8; i++) {
+                    $.ajax({
+                        url: '/api/coords/' + (199 + (100 * i)),
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data) {
+                                obj[i] = data[0];
+                                pointsLoaded++;
+
+                                if (pointsLoaded >= 8) {
+                                    map = new Map(points);
+                                    map.start();
+                                }
+                            }
+                        }
+                    });
+                };
+            };
+
+            $(document).ready(function () {
+                var canvas = $("#map")[0].getContext("2d");
+                getPlanetData();
+            });
+
+            //Updates and draws the minimap
+            //TODO: Implement a map loop
+            Map = (function () {
+                //Constructor
+                function Map(points) {
+                    this.map = canvas;
+                    this.options = {}
+                    this.options.point_radius = 2;
+                    this.options.point_color = "#E0C61B";
+                    this.options.width = 200;
+                    this.options.height = 200;
+                    this.points = points
+
+                    this.normalizePoints();
+                }
+
+                //Starts the map loop
+                Map.prototype.start = function () {
+                    console.log("Starting");
+                    this.draw();
+                }
+
+                //Draws the minimap
+                Map.prototype.draw = function () {
+                    this.map.fillStyle = "#333";
+                    this.map.fillRect(0, 0, this.options.width, this.options.height);
+
+                    this.map.beginPath();
+                    this.map.fillStyle = this.options.point_color;
+                    for (i in points) {
+                        console.log("Point: x=" + points[i].x + ", y=" + points[i].y);
+                        this.map.arc(points[i].x, points[i].y, this.options.point_radius, 0, 2 * Math.PI, false);
+                        this.map.fill();
+                    }
+                }
+
+                //Brings point coordinates in range (0..map.size) to draw them properly
+                Map.prototype.normalizePoints = function () {
+                    /*
+                    var max = {x: 0, y: 0}
+                    var min = {x: Number.POSITIVE_INFINITY, y: Number.POSITIVE_INFINITY}
+                    for(i in points) {
+                    max.x = Math.max(max.x, points[i].x);
+                    max.y = Math.max(max.y, points[i].y);
+                    min.x = Math.min(min.x, points[i].x);
+                    min.y = Math.min(min.y, points[i].y);
+                    }
+
+                    for(i in points) {
+                    points[i].x = (((points[i].x-min.x)/(max.x-min.x))*190)+5;
+                    points[i].y = (((points[i].y-min.y)/(max.y-min.y))*190)+5;
+                    }
+                    */
+                }
+
+                return Map;
+            })();
+        }).call(this);
+    </script>
+}
+
+<h1 class='title'>Planetary Data System</h1>
+<div id='content'>
+    <p class='desc'>Access NASA's Planetary Data System data sets</p>
+</div>
+<div id='minimap'>
+    <div class='title'>
+    Map
+    </div>
+    <canvas id='map' height='200' width='200'></canvas>
+</div>

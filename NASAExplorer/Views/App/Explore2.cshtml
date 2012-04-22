@@ -19,6 +19,31 @@
             color: black;
         }
         /*canvas { background: black; }*/
+        #minimap {
+          position: absolute;
+          bottom: 24px;
+          right: 10px;
+          border: 2px solid black;
+          width: 200px;
+          height: 230px;
+          z-index: 1029; /* 1 index lower than navbar */
+        }
+
+        #minimap .title {
+          height: 30px;
+          line-height: 30px;
+          color: white;
+          font-weight: bold;
+          text-align: center;
+          background: #45484d; /* Old browsers */
+          background: -moz-linear-gradient(top, #45484d 0%, #000000 100%); /* FF3.6+ */
+          background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+          background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+          background: -o-linear-gradient(top, #45484d 0%,#000000 100%); /* Opera 11.10+ */
+          background: -ms-linear-gradient(top, #45484d 0%,#000000 100%); /* IE10+ */
+          background: linear-gradient(top, #45484d 0%,#000000 100%); /* W3C */
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+        }
     </style>
 }
 
@@ -32,10 +57,11 @@
 	<script src="@Url.Content("~/Scripts/threex/THREEx.FullScreen.js")"></script>
 	<script src="@Url.Content("~/Scripts/threex/THREEx.WindowResize.js")"></script>
 	<script src="@Url.Content("~/Scripts/threex.dragpancontrols.js")"></script>
+    <script src="@Url.Content("~/Scripts/minimap.js")"></script>
     <script type="text/javascript">
-        var stats, scene, renderer;
-        var camera, cameraControl;
-
+        var stats, scene, renderer,
+            camera, cameraControl,
+            map;
 
         if (!init()) animate();
 
@@ -47,15 +73,19 @@
                     success: function (data) {
                         if (data) {
                             var radius = 5,
-                                        segments = 16,
-                                        rings = 16;
-                            var geometry = new THREE.SphereGeometry(0.05, 16, 16); //new THREE.TorusGeometry(1, 0.42);
-                            var material = new THREE.MeshNormalMaterial();
-                            var planet = new THREE.Mesh(geometry, material);
+                                segments = 16,
+                                rings = 16,
+                                geometry = new THREE.SphereGeometry(0.05, 16, 16), //new THREE.TorusGeometry(1, 0.42);
+                                material = new THREE.MeshNormalMaterial(),
+                                planet = new THREE.Mesh(geometry, material);
 
                             planet.position.x = data[0].X;
                             planet.position.y = data[0].Y;
                             planet.position.z = data[0].Z;
+
+                            if (map) {
+                                map.addPoint(data[0].X * 4, data[0].Y * 4);
+                            }
 
                             sc.add(planet);
                         }
@@ -127,6 +157,9 @@
             sun.position.y = 0;
             sun.position.z = 0;
 
+            map = new MiniMap();
+            map.start([{ "x": 100, "y": 100, "z": 0}]);
+
             scene.add(sun);
 
             renderPlanets(scene);
@@ -161,5 +194,10 @@
 <div class="bottom" id="inlineDoc" >
 	<b>loading may take several minutes</b> - <i>p</i> for screenshot
 </div> 
-
+<div id='minimap'>
+    <div class='title'>
+    Map
+    </div>
+    <canvas id='map' height='200' width='200'></canvas>
+</div>
 <div id="explore"></div>
