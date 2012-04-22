@@ -5,9 +5,105 @@
 
 @section Head {
     <style type="text/css">
-        body { padding-top: 60px; }
+        canvas { position: absolute; height: 100%; width: 100%; }
     </style>
 }
 
-<h1>3D canvas here</h1>
-<canvas></canvas>
+@section Javascript {
+    <script type="text/javascript" src="@Url.Content("~/Scripts/three.min.js")"></script>
+    <script type="text/javascript">
+        (function () {
+            /*
+
+            // set the scene size
+            var WIDTH = 400,
+            HEIGHT = 300;
+
+            // set some camera attributes
+            var VIEW_ANGLE = 45,
+            ASPECT = WIDTH / HEIGHT,
+            NEAR = 0.1,
+            FAR = 10000;
+
+            // get the DOM element to attach to
+            // - assume we've got jQuery to hand
+            var $container = $('#container');
+
+            // create a WebGL renderer, camera
+            // and a scene
+            var renderer = new THREE.WebGLRenderer();
+            var camera =
+            new THREE.PerspectiveCamera(
+            VIEW_ANGLE,
+            ASPECT,
+            NEAR,
+            FAR);
+
+            var scene = new THREE.Scene();
+
+            // add the camera to the scene
+            scene.add(camera);
+
+            // the camera starts at 0,0,0
+            // so pull it back
+            camera.position.z = 300;
+
+            // start the renderer
+            renderer.setSize(WIDTH, HEIGHT);
+
+            // attach the render-supplied DOM element
+            $container.append(renderer.domElement);
+
+            */
+
+            var width = window.clientWidth,
+                height = window.clientHeight,
+                angle = 45,
+                aspect = width / height,
+                near = 0.00000000001,
+                far = 10,
+                canvas = $('#explore'),
+                renderer = undefined,
+                camera = undefined,
+                scene = undefined,
+                resize = function resize() {
+                    if (canvas) {
+                        //update dimension vars
+                        width = window.clientWidth;
+                        height = window.clientHeight;
+
+                        canvas.width(width);
+                        canvas.height(height);
+                    }
+                };
+
+            $(document).ready(function () {
+                // setup resizing of the canvas
+                $(window).bind('resize', resize);
+
+                if (typeof renderer === "undefined") {
+                    renderer = new THREE.WebGLRenderer();
+                }
+
+                if (typeof camera === "undefined") {
+                    camera = new THREE.PerspectiveCamera(
+                        angle,
+                        aspect,
+                        near,
+                        far
+                    );
+                }
+
+                if (typeof scene === "undefined") {
+                    scene = new THREE.Scene();
+                }
+
+                scene.add(camera);
+                camera.position.z = 5; // move camera back from 0,0,0
+                renderer.setSize(width, height);
+                canvas.append(renderer.domElement);
+            });
+        })();
+    </script>
+}
+<canvas id="explore"></canvas>

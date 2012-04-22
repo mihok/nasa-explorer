@@ -22,6 +22,14 @@ namespace NASAExplorer.Controllers
             return Json(null);
         }
 
+        public JsonResult GetCoordsByDate(DateTime start, DateTime end, int id = 399)
+        {
+            HorizonInterface horizon = new HorizonInterface(start, end);
+            var xyz = horizon.GetCoordinates(id);
+
+            return Json(xyz, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetCoords(int id = 399) // default to earth
         {
             HorizonInterface horizon = new HorizonInterface();
